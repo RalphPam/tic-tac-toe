@@ -4,15 +4,16 @@ const { check, validationResult } = require('express-validator')
 const createPlayer = (
 
     [check('name', 'Name is required').not().isEmpty()],
-    
+
     async (req, res) => {
 
-        const { name } = req.body;
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+
+        const { name } = req.body;
 
         try {
             let player = await Player.findOne({ name });
