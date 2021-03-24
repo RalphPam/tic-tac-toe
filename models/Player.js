@@ -2,8 +2,14 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const PlayerSchema = new Schema({
-    name: String,
-    wins: Number
+    name: {
+        type: String,
+        required: true
+    },
+    wins: {
+        type: Number,
+        default: 0
+    }
 })
 
-module.exports = PlayerSchema;
+module.exports = mongoose.model('players', PlayerSchema);
