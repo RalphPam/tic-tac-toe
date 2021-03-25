@@ -48,4 +48,39 @@ const getAllPlayers = (
     }
 );
 
-module.exports = { createPlayer, getAllPlayers };
+const addWinCount = (
+    
+    [check('playerId', 'PlayerId is required').not().isEmpty()],
+
+    async (req, res) => {
+       const errors = validationResult(req);
+       
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { playerId } = req.body;
+
+        try {
+
+            let player = await Player.findById(playerId);
+
+            if (!player) {
+                return res.status(400).json({ errors: ['Player does not exist'] });
+            }
+
+            player.wins = player.wins + 1;
+
+            await player.save();
+
+            return res.json({ player });
+            
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Server Error');
+        }
+    }
+
+);
+
+module.exports = { createPlayer, getAllPlayers, addWinCount };
