@@ -126,4 +126,36 @@ const getAllRooms = (
     }
 );
 
-module.exports = { enterRoom, leaveRoom, getAllRooms };
+const getRoomById = (
+
+    [check('id', 'Id is required').not().isEmpty()],
+
+    async (req, res) => {
+
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { id } = req.params;
+
+        try {
+            let room = await Room.findById(id);
+
+            // If player does not exists
+            if (!room) {
+                return res.status(400).json({ errors: ["Room doesn't exists"] });
+            }
+
+            return res.json({ room });
+
+        } catch(err) {
+            console.error(err);
+            res.status(500).send('Server Error');
+        }
+
+    }
+);
+
+module.exports = { enterRoom, leaveRoom, getAllRooms, getRoomById };
