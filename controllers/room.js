@@ -1,4 +1,5 @@
 const Room = require('../models/Room');
+const Player = require('../models/Player');
 const { check, validationResult } = require('express-validator')
 
 const enterRoom = (
@@ -20,6 +21,15 @@ const enterRoom = (
 
         try {
             let room = await Room.findOne({ roomName });
+            let player = await Player.findById( playerId );
+
+            if (!player) {
+                return res.status(400).json({ error: ["Player doesn't exists"]});
+            }
+
+            if (player.isPlaying) {
+                return res.status(400).json({ error: ["Player is already in a room/playing"]});
+            }
 
             if (!room) {
                 return res.status(400).json({ error: ["Room doesn't exists"]});
@@ -33,8 +43,10 @@ const enterRoom = (
                 return res.status(400).json({ error: ["Room already full"]});
             }
 
+            player.isPlaying = true;
             room.players.push(playerId);
 
+            await player.save();
             await room.save();
 
             res.json({ room });
@@ -66,6 +78,11 @@ const leaveRoom = (
 
         try {
             let room = await Room.findOne({ roomName });
+            let player = await Player.findById( playerId );
+
+            if (!player) {
+                return res.status(400).json({ error: ["Player doesn't exists"]});
+            }
 
             if (!room) {
                 return res.status(400).json({ error: ["Room doesn't exists"]});
@@ -82,7 +99,9 @@ const leaveRoom = (
             const indexOfPlayer = room.players.indexOf(playerId);
             // Remove player in the room
             room.players.splice(indexOfPlayer, 1);
+            player.isPlaying = false;
 
+            await player.save();
             await room.save();
 
             res.json({ room });

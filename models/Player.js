@@ -9,6 +9,10 @@ const PlayerSchema = new Schema({
     wins: {
         type: Number,
         default: 0
+    },
+    isPlaying : {
+        type: Boolean,
+        default: false
     }
 })
 
