@@ -3,6 +3,7 @@ import './styles/main.scss'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Home from './components/Home';
+import LeaderBoard from './components/LeaderBoard'
 
 const App: React.FC = () => {
   return (
@@ -10,6 +11,7 @@ const App: React.FC = () => {
       <Router>
         <Switch>
           <Route exact path='/' component={Home} />
+          <Route exact path='/leaderboard' component={LeaderBoard} />
         </Switch>
       </Router>
     </div>

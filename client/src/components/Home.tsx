@@ -32,7 +32,7 @@ const Home: React.FC = () => {
                         </option>
                     )}
                 </select>
-                <Link to='/leaderboards'>LEADERBOARDS</Link>
+                <Link to='/leaderboard'>LEADERBOARD</Link>
             </div>
         </div>
     )
