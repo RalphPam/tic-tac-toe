@@ -1,0 +1,17 @@
+.home {
+    &-menu {
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        input {
+            margin-bottom: 20px;
+        } 
+        select {
+            margin-bottom: 20px;
+        }
+    }
+}
