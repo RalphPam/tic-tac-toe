@@ -36,4 +36,16 @@ const createPlayer = (
     }
 );
 
-module.exports = { createPlayer };
+const getAllPlayers = (
+    async (req, res) => {
+        try {
+            let players = await Player.find();
+            res.json({ players });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Server Error');
+        }
+    }
+);
+
+module.exports = { createPlayer, getAllPlayers };

@@ -95,4 +95,16 @@ const leaveRoom = (
 
 );
 
-module.exports = { enterRoom, leaveRoom };
+const getAllRooms = (
+    async (req, res) => {
+        try {
+            let rooms = await Room.find();
+            res.json({ rooms });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Server Error')
+        }
+    }
+);
+
+module.exports = { enterRoom, leaveRoom, getAllRooms };
