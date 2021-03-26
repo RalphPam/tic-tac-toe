@@ -144,7 +144,7 @@ const GameRoom = () => {
             setCellValues(prev => ({ ...prev, [cellValue] : letter }));
             setTurn(letter === "X" ? "O" : "X");
 
-            socket.emit("playerMove", {cellValue, letter});
+            socket.emit("playerMove", {cellValue, letter ,roomId});
         }
     }
 
@@ -185,7 +185,7 @@ const GameRoom = () => {
         setReady({
             X: false,
             O: false
-        })
+        });
     }
     
     const generatePlayers = () => {
@@ -225,9 +225,11 @@ const GameRoom = () => {
 
     useEffect(() => {
         socket.on("playerMove", moveData => {
-            if (moveData.letter !== letter) {
-                setTurn(letter);
-                setCellValues(prev => ({ ...prev, [moveData.cellValue] : moveData.letter }));
+            if (moveData.roomId === roomId) {
+                if (moveData.letter !== letter) {
+                    setTurn(letter);
+                    setCellValues(prev => ({ ...prev, [moveData.cellValue] : moveData.letter }));
+                }
             }
         })
     }, [letter])
@@ -266,6 +268,22 @@ const GameRoom = () => {
             // Get Room Data again if someone has entered the same room
             if (room) {
                 if (roomEntered._id === room._id) {
+                    setResult("");
+                    setCellValues({
+                        8: '',
+                        1: '',
+                        6: '',
+                        3: '',
+                        5: '',
+                        7: '',
+                        4: '',
+                        9: '',
+                        2: ''
+                    });
+                    setReady({
+                        X: false,
+                        O: false
+                    });
                     getRoomData(room._id, setRoom, setPlayers);
                 }
             }
