@@ -232,7 +232,7 @@ const GameRoom = () => {
                 }
             }
         })
-    }, [letter])
+    }, [letter, roomId])
 
     useEffect(() => {
         // If both players are ready. First turn will be X
