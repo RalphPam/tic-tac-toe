@@ -1,3 +1,11 @@
+@keyframes popup {
+    0% {
+        opacity: 0;
+    } 100% {
+        opacity: 1;
+    }
+}
+
 .popup {
     position: fixed;
     width: 100vw;
@@ -8,6 +16,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    opacity: 0;
+    animation: popup 1s ease-in-out forwards;
     &-menu {
         width: 400px;
         height: 250px;

@@ -156,7 +156,6 @@ const GameRoom = () => {
             9: '',
             2: ''
         });
-        setTurn("X");
         setReady({
             X: false,
             O: false
@@ -255,7 +254,11 @@ const GameRoom = () => {
         <div className="gameRoom">
             {result !== "" && 
                 <Popup 
-                    result="YOU WIN" 
+                    result={
+                        result === "DRAW" ? "DRAW" :
+                        result === "X WINS" ? letter === "X" ? "YOU WIN" : "YOU LOSE" :
+                        result === "O WINS" ? letter === "O" ? "YOU WIN" : "YOU LOSE" : ""
+                    }
                     leaveRoomHandler={leaveRoomHandler}
                     playAgainHandler={playAgainHandler}
                 />
