@@ -4,6 +4,8 @@ import { io } from 'socket.io-client';
 import { Players } from '../utils/player';
 import { Rooms } from '../utils/rooms';
 
+import Popup from './Popup';
+
 type Player = {
     _id: string,
     isPlaying: Boolean,
@@ -140,6 +142,26 @@ const GameRoom = () => {
         }
 
     }
+
+    const playAgainHandler = () => {
+        setResult("");
+        setCellValues({
+            8: '',
+            1: '',
+            6: '',
+            3: '',
+            5: '',
+            7: '',
+            4: '',
+            9: '',
+            2: ''
+        });
+        setTurn("X");
+        setReady({
+            X: false,
+            O: false
+        })
+    }
     
     const generatePlayers = () => {
 
@@ -231,6 +253,13 @@ const GameRoom = () => {
 
     return (
         <div className="gameRoom">
+            {result !== "" && 
+                <Popup 
+                    result="YOU WIN" 
+                    leaveRoomHandler={leaveRoomHandler}
+                    playAgainHandler={playAgainHandler}
+                />
+            }
             <div className="gameRoom-game">
                 <div className="players">
                     {generatePlayers()}         
