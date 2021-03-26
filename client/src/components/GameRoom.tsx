@@ -214,7 +214,7 @@ const GameRoom = () => {
                 setResult("X WINS");
                 letter === "X" && Players.addWinCount(players[0]._id);
             } else if (check("O", cellValues)) {
-                setResult("Y WINS");
+                setResult("O WINS");
                 letter === "O" && Players.addWinCount(players[1]._id);
             } else if (cellNumbers.every(cellKey => cellValues[cellKey])) {
                 setResult("DRAW");
