@@ -150,7 +150,7 @@ const GameRoom = () => {
                 playerElements.push(
                     <div key={i}>
                         <p>{`Player ${i + 1} ${ready[i === 0 ? 'X' : 'O'] ? '- READY' : ''}`}</p>
-                        <p>{`${i === 0 ? 'X' : 'O'}: ${players[i] ? players[i].name : 'Waiting...'}`}</p>
+                        <p>{`${i === 0 ? 'X' : 'O'} : ${players[i] ? players[i].name : 'Waiting...'}`}</p>
                     </div>
                 );
             }
@@ -232,7 +232,6 @@ const GameRoom = () => {
     return (
         <div className="gameRoom">
             <div className="gameRoom-game">
-                <h2>You WIN</h2>
                 <div className="players">
                     {generatePlayers()}         
                 </div>
@@ -241,12 +240,14 @@ const GameRoom = () => {
                     <button className="box" key={index} onClick={() => moveHandler(cellNumber)}>{cellValues[cellNumber]}</button>
                 )}
                 </div>
-                <h3>Your Turn</h3>
-                <div className="menu">
+                {(ready["X"] && ready["O"]) && 
+                    <h3>{`${letter === turn ? "Your" : "Opponent's"} Turn`}</h3>
+                }
+                <div className="menu" style={{justifyContent: (ready["X"] && ready["O"]) ? "center" : "space-between"}}>
                     {(!ready["X"] || !ready["O"]) && 
                         <button className="start" onClick={readyHandler}>START</button>
                     }
-                    <button className="leave" onClick={leaveRoomHandler}>LEAVE ROOM</button>
+                    <button className="leave" onClick={leaveRoomHandler}>LEAVE</button>
                 </div>
             </div>
         </div>
