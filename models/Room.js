@@ -5,9 +5,12 @@ const RoomSchema = new Schema({
     roomName: {
         type: String
     },
-    players: {
-        type: Array
-    }
+    players: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'players'
+        }
+    ]
 })
 
 module.exports = mongoose.model('rooms', RoomSchema);

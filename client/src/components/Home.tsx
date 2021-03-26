@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { io } from 'socket.io-client';
 import { Rooms } from '../utils/rooms';
 import { Players } from '../utils/player';
+
+const socket = io();
 
 type Room = {
     _id: string,
@@ -22,14 +25,17 @@ const Home: React.FC = () => {
     const enterHandler = () => {
         Players.createPlayer({ name })
             .then(playerData => {
+
                 if (playerData) {
                     Rooms.enterRoom({ playerId: playerData.player._id, roomName: room})
-                        .then(roomData => {
-                            if (roomData) {
-                                history.push(`/gameRoom?playerId=${playerData.player._id}&roomId=${roomData.room._id}`)
-                            }
-                        })
+                    .then(roomData => {
+                        if (roomData) {
+                            socket.emit('enterOrLeaveRoom', roomData.room);
+                            history.push(`/gameRoom?playerId=${playerData.player._id}&roomId=${roomData.room._id}`)
+                        }
+                    })
                 }
+
             })
     }
 

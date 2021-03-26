@@ -141,7 +141,7 @@ const getRoomById = (
         const { id } = req.params;
 
         try {
-            let room = await Room.findById(id);
+            let room = await Room.findById(id).populate('players');
 
             // If player does not exists
             if (!room) {
