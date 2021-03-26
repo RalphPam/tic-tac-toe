@@ -26,6 +26,14 @@ io.on("connection", socket => {
         socket.broadcast.emit("Someone Entered or Leaved",  room);
     })
 
+    socket.on("ready", (playerReady) => {
+        socket.broadcast.emit("ready", playerReady);
+    });
+
+    socket.on("playerMove", (moveData) => {
+        socket.broadcast.emit("playerMove", moveData);
+    })
+
 })
 
 server.listen(PORT, () => {
