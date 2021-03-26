@@ -63,6 +63,7 @@ const Home: React.FC = () => {
     return (
         <div className="home">
             <div className="home-menu">
+                <h2>TIC TAC TOE</h2>
                 <input value={name} type="text" placeholder="Enter your name here..." onChange={e => setName(e.target.value)} />
                 <select name="rooms" id="rooms" value={room} onChange={e => setRoom(e.target.value)} >
                     <option value="">Select Room</option>
