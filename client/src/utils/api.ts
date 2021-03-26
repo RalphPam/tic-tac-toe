@@ -16,7 +16,7 @@ export const request = async (method: Method, url: string, body: object = {}) =>
             return res;
         } catch (error) {
             console.error(error);
-            return;
+            return error.response;
         }
     }
 
@@ -26,7 +26,7 @@ export const request = async (method: Method, url: string, body: object = {}) =>
             return res;
         } catch (error) {
             console.error(error);
-            return;
+            return error.response;
         }
     }
 }

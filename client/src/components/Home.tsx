@@ -21,6 +21,7 @@ const Home: React.FC = () => {
     const [rooms, setRooms] = useState<RoomsType>([]);
     const [name, setName] = useState<string>('');
     const [room, setRoom] = useState<string>('');
+    const [error, setError] = useState<string>('');
 
     const enterHandler = () => {
         Players.createPlayer({ name })
@@ -29,7 +30,9 @@ const Home: React.FC = () => {
             if (playerData) {
                 Rooms.enterRoom({ playerId: playerData.player._id, roomName: room})
                 .then(roomData => {
-                    if (roomData) {
+                    if (roomData.error) {
+                        setError(roomData.error[0]);
+                    } else if (roomData) {
                         socket.emit('enterOrLeaveRoom', roomData.room);
                         history.push(`/gameRoom?playerId=${playerData.player._id}&roomId=${roomData.room._id}`)
                     }
@@ -64,6 +67,7 @@ const Home: React.FC = () => {
         <div className="home">
             <div className="home-menu">
                 <h2>TIC TAC TOE</h2>
+                {error && <p>{error}</p>}
                 <input value={name} type="text" placeholder="Enter your name here..." onChange={e => setName(e.target.value)} />
                 <select name="rooms" id="rooms" value={room} onChange={e => setRoom(e.target.value)} >
                     <option value="">Select Room</option>
