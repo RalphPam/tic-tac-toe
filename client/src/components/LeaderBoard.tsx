@@ -28,7 +28,7 @@ const LeaderBoard = () => {
     return (
         <div className="leaderboard">
             <div className="leaderboard-box">
-                <Link to="/">HOME</Link>
+                <Link to="/">&lt; &lt; HOME</Link>
                 <h3>LEADERBOARD</h3>
                 <ul>
                     {players.length > 0 && players.map((player, index) =>
