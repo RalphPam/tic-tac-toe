@@ -48,6 +48,18 @@ const Home: React.FC = () => {
             })
     }, [])
 
+    useEffect(() => {
+        socket.on('Someone Entered or Leaved', roomEntered => {
+            // Get Room Data again if someone has entered the same room
+            Rooms.getAllRooms()
+            .then(data => {
+                if (data) {
+                    setRooms(data.rooms);
+                }
+            })
+        })  
+    }, [])
+
     return (
         <div className="home">
             <div className="home-menu">

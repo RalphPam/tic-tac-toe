@@ -16,5 +16,9 @@ export const Players = {
     getPlayerById: async (id: string | null | undefined) => {
         const res = await request('get', `/player/getPlayerById/${id}`);
         return res?.data;
+    },
+    addWinCount: async (playerId: string | null | undefined) => {
+        const res = await request('post', `/player/addWinCount`, { playerId });
+        return res?.data;
     }
 }

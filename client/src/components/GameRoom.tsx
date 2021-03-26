@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { io } from 'socket.io-client';
+import { Players } from '../utils/player';
 import { Rooms } from '../utils/rooms';
 
 type Player = {
@@ -13,7 +14,7 @@ type Player = {
 type Room = {
     _id: string,
     roomName: string,
-    players: string[]
+    players: string[] | Player[]
 };
 
 type Ready = {
@@ -38,6 +39,31 @@ type CellNumber = 8 | 1 | 6 | 3 | 5 | 7 | 4 | 9 | 2;
 const cellNumbers: CellNumber[] = [ 8, 1, 6, 3, 5, 7, 4, 9, 2 ];
 
 const socket = io();
+
+const possibleWinningCombinations: CellNumber[][] = [
+    [1, 5, 9],
+    [1, 6, 8],
+    [2, 4, 9],
+    [2, 5, 8],
+    [2, 6, 7],
+    [3, 4, 8],
+    [3, 5, 7],
+    [4, 5, 6]
+];
+
+const check = (letter: string, cellValues: CellValues) => {
+    for (let i = 0; i < possibleWinningCombinations.length; i++) {
+        let sum = 0;
+        possibleWinningCombinations[i].forEach(cellKey => {
+            if (cellValues[cellKey] === letter) {
+                sum += cellKey;
+            }
+        })
+
+        if (sum === 15) return true;
+    }
+    return false;
+} 
 
 const getRoomData = (roomId: string | null, setRoom: Function, setPlayers: Function) => {
 
@@ -69,8 +95,9 @@ const GameRoom = () => {
         X: false,
         O: false
     });
-    const [letter, setLetter] = useState<string>("");
+    const [letter, setLetter] = useState<"X" | "O" | "" >("");
     const [turn, setTurn] = useState<string>("");
+    const [result, setResult] = useState("");
 
     const [cellValues, setCellValues] = useState<CellValues>({
         8: '',
@@ -88,6 +115,7 @@ const GameRoom = () => {
         if (letter === turn) {
             setCellValues(prev => ({ ...prev, [cellValue] : letter }));
             setTurn(letter === "X" ? "O" : "X");
+
             socket.emit("playerMove", {cellValue, letter});
         }
     }
@@ -130,6 +158,23 @@ const GameRoom = () => {
 
         return playerElements;
     }
+
+    useEffect(() => {
+
+        if (players) {
+
+            if (check("X", cellValues)) {
+                setResult("X WINS");
+                letter === "X" && Players.addWinCount(players[0]._id);
+            } else if (check("O", cellValues)) {
+                setResult("Y WINS");
+                letter === "O" && Players.addWinCount(players[1]._id);
+            } else if (cellNumbers.every(cellKey => cellValues[cellKey])) {
+                setResult("DRAW");
+            }
+
+        }
+    }, [cellValues, letter, players])
 
     useEffect(() => {
         socket.on("playerMove", moveData => {
@@ -198,7 +243,7 @@ const GameRoom = () => {
                 </div>
                 <h3>Your Turn</h3>
                 <div className="menu">
-                    {room?.players.length === 2 && 
+                    {(!ready["X"] || !ready["O"]) && 
                         <button className="start" onClick={readyHandler}>START</button>
                     }
                     <button className="leave" onClick={leaveRoomHandler}>LEAVE ROOM</button>
