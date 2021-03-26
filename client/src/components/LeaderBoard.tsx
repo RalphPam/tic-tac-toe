@@ -18,11 +18,11 @@ const LeaderBoard = () => {
 
     useEffect(() => {
         Players.getAllPlayers()
-            .then(data => {
-                if (data) {
-                    setPlayers(data.players.sort((a: Player, b: Player) => b.wins - a.wins));
-                }
-            })
+        .then(data => {
+            if (data) {
+                setPlayers(data.players.sort((a: Player, b: Player) => b.wins - a.wins));
+            }
+        })
     }, [])
 
     return (

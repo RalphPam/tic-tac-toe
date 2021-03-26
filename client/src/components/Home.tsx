@@ -24,28 +24,28 @@ const Home: React.FC = () => {
 
     const enterHandler = () => {
         Players.createPlayer({ name })
-            .then(playerData => {
+        .then(playerData => {
 
-                if (playerData) {
-                    Rooms.enterRoom({ playerId: playerData.player._id, roomName: room})
-                    .then(roomData => {
-                        if (roomData) {
-                            socket.emit('enterOrLeaveRoom', roomData.room);
-                            history.push(`/gameRoom?playerId=${playerData.player._id}&roomId=${roomData.room._id}`)
-                        }
-                    })
-                }
+            if (playerData) {
+                Rooms.enterRoom({ playerId: playerData.player._id, roomName: room})
+                .then(roomData => {
+                    if (roomData) {
+                        socket.emit('enterOrLeaveRoom', roomData.room);
+                        history.push(`/gameRoom?playerId=${playerData.player._id}&roomId=${roomData.room._id}`)
+                    }
+                })
+            }
 
-            })
+        })
     }
 
     useEffect(() => {
         Rooms.getAllRooms()
-            .then(data => {
-                if (data) {
-                    setRooms(data.rooms);
-                }
-            })
+        .then(data => {
+            if (data) {
+                setRooms(data.rooms);
+            }
+        })
     }, [])
 
     useEffect(() => {

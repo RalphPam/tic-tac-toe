@@ -38,6 +38,8 @@ type CellValues = {
 
 type CellNumber = 8 | 1 | 6 | 3 | 5 | 7 | 4 | 9 | 2;
 
+type Letter = "X" | "O" | "";
+
 const cellNumbers: CellNumber[] = [ 8, 1, 6, 3, 5, 7, 4, 9, 2 ];
 
 const socket = io();
@@ -56,6 +58,8 @@ const possibleWinningCombinations: CellNumber[][] = [
 const check = (letter: string, cellValues: CellValues) => {
     for (let i = 0; i < possibleWinningCombinations.length; i++) {
         let sum = 0;
+
+        // If sum is equal to 15 then we have a winner
         possibleWinningCombinations[i].forEach(cellKey => {
             if (cellValues[cellKey] === letter) {
                 sum += cellKey;
@@ -82,7 +86,6 @@ const getRoomData = (roomId: string | null, setRoom: Function, setPlayers: Funct
 
 }
 
-
 const GameRoom = () => {
 
     const history = useHistory();
@@ -91,16 +94,39 @@ const GameRoom = () => {
     const playerId = params.get('playerId');
     const roomId = params.get('roomId');
 
+    // Players in the Room
     const [players, setPlayers] = useState<Player[] | null>(null);
+
+    // Current Room
     const [room, setRoom] = useState<Room | null>(null);
+
+    // State to check if players are ready
     const [ready, setReady] = useState<Ready>({
         X: false,
         O: false
     });
-    const [letter, setLetter] = useState<"X" | "O" | "" >("");
-    const [turn, setTurn] = useState<string>("");
+
+    // Letter that will be use by the user
+    const [letter, setLetter] = useState<Letter>("");
+
+    // Current player in Turn
+    const [turn, setTurn] = useState<Letter>("");
+
+    // Result of the game
     const [result, setResult] = useState("");
 
+    // Values on each cell
+    /*
+        -------------
+        | 8 | 1 | 6 |
+        -------------
+        | 3 | 5 | 7 |
+        -------------
+        | 4 | 9 | 2 |
+        -------------
+
+        All possible combinations sum is 15
+    */
     const [cellValues, setCellValues] = useState<CellValues>({
         8: '',
         1: '',
